@@ -522,20 +522,38 @@ export default function MboxWorkspace() {
 
   return (
     <div className="space-y-5">
-      {/* 顶部上传与一键操作栏 */}
+      {/* 大尺寸拖拽/点击上传卡片：方便用户直接把 Google Takeout / Thunderbird .MBOX 或 .EML 拖入页面 */}
+      <label
+        data-testid="mbox-dropzone-card"
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault();
+          if (e.dataTransfer.files?.length) handleFileUpload(e.dataTransfer.files);
+        }}
+        className="relative flex cursor-pointer flex-col items-center justify-center gap-2.5 rounded-2xl border-2 border-dashed border-emerald-500/40 bg-slate-900/80 p-6 text-center shadow-lg transition hover:border-emerald-400 hover:bg-slate-900 active:scale-[0.99]"
+      >
+        <input
+          data-testid="mbox-file-input"
+          type="file"
+          accept=".mbox,.eml,.txt,application/mbox,message/rfc822"
+          className="sr-only"
+          onChange={(e) => handleFileUpload(e.target.files)}
+        />
+        <span className="pointer-events-none text-3xl">📬</span>
+        <span className="pointer-events-none text-base font-bold text-white sm:text-lg">
+          Drop a Google Takeout / Apple Mail / Thunderbird .MBOX or .EML file here
+        </span>
+        <span className="pointer-events-none inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-slate-950 shadow-md shadow-emerald-500/20">
+          📂 Tap or Click Here to Select .MBOX / .EML Archive Locally
+        </span>
+        <span className="pointer-events-none text-xs text-slate-400">
+          100% Local In-Browser Reader · Decodes MIME Attachments, Quoted-Printable &amp; Base64 · Zero Cloud Upload
+        </span>
+      </label>
+
+      {/* 顶部一键操作栏 */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-900/90 p-4 shadow-lg">
         <div className="flex flex-wrap items-center gap-2.5">
-          <label className="relative cursor-pointer rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-slate-950 shadow-md shadow-emerald-500/20 transition hover:bg-emerald-400 active:scale-[0.99]">
-            <span className="pointer-events-none">📂 Open .MBOX / .EML File Locally</span>
-            <input
-              data-testid="mbox-file-input"
-              type="file"
-              accept=".mbox,.eml,.txt,application/mbox,message/rfc822"
-              className="sr-only"
-              onChange={(e) => handleFileUpload(e.target.files)}
-            />
-          </label>
-
           <button
             type="button"
             data-testid="load-sample-mbox"
