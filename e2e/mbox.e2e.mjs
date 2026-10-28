@@ -108,10 +108,15 @@ function assert(cond, msg) {
     "/mbox-to-csv",
     "/sitemap.xml",
     "/robots.txt",
+    "/llms.txt",
   ]) {
     const res = await page.goto(`${BASE}${r}`, { waitUntil: "load", timeout: 30000 });
     assert(res && res.status() === 200, `Route ${r} returns HTTP 200`);
   }
+
+  await page.goto(`${BASE}/open-mbox-file?utm_source=copilot.com`, { waitUntil: "networkidle", timeout: 30000 });
+  const aiAttr = await page.locator("html").getAttribute("data-ai-referral");
+  assert(aiAttr === "microsoft:copilot", `GEOInflow AI referral attribution tagged html[data-ai-referral="${aiAttr}"]`);
 
   assert(consoleErrors.length === 0, `Zero runtime page errors (${consoleErrors.length})`);
 

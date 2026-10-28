@@ -1,0 +1,17 @@
+# MboxViewer.pro — Free Online MBOX & Google Takeout Email Viewer, PDF & CSV Converter
+
+> MboxViewer.pro (https://mbox-viewer-nu.vercel.app) is a 100% client-side `.MBOX` and `.EML` email archive reader and converter. It lets users open, search, and inspect Google Takeout Gmail archives, Mozilla Thunderbird mailboxes, and Apple Mail `.MBOX` files directly in the browser without installing desktop mail clients or uploading confidential emails to any server. It decodes MIME headers, Quoted-Printable and Base64 bodies, extracts attachments, and exports individual emails to vector `.PDF` or `.EML` and full mailbox indexes to `.CSV`.
+
+## Core Tools & Canonical Routes
+
+- [MBOX Viewer Online (100% Client-Side Reader)](https://mbox-viewer-nu.vercel.app/): Drag and drop `.MBOX` or `.EML` archives to browse messages, search by sender/subject/keyword, inspect RFC 822 headers, and download embedded MIME attachments locally.
+- [Open MBOX File from Google Takeout & Apple Mail](https://mbox-viewer-nu.vercel.app/open-mbox-file): Instantly inspect multi-megabyte Google Takeout (`All Mail Including Spam and Trash.mbox`) and Apple Mail exports in your browser tab via fast local file slicing.
+- [MBOX to PDF Converter Online](https://mbox-viewer-nu.vercel.app/mbox-to-pdf): Convert individual `.MBOX` or `.EML` email messages into clean, court- and audit-ready vector `.PDF` documents complete with `From`, `To`, `Date`, `Subject`, `Message-ID`, body text, and attachment inventory.
+- [MBOX to CSV Converter & Mailbox Spreadsheet Exporter](https://mbox-viewer-nu.vercel.app/mbox-to-csv): Export all or filtered emails from an `.MBOX` archive into an Excel- and Google Sheets-ready `.CSV` ledger (`Message_ID`, `Date`, `From`, `To`, `Subject`, `Attachments_Count`, `Body_Snippet`).
+
+## Key Technical Capabilities
+
+- **Full RFC 5322 / MIME Parser**: Unfolds multiline headers, decodes RFC 2047 (`=?UTF-8?B?...?=` and `=?UTF-8?Q?...?=`) subjects and sender names, and parses nested `multipart/mixed` and `multipart/alternative` boundaries.
+- **Attachment Extraction**: Decodes Base64 MIME attachments in memory for instant 1-click local download.
+- **Audit-Grade Exports**: Single-click `.PDF` vector document generation, `.CSV` spreadsheet export, and `.EML` message extraction.
+- **Privacy & Security**: 100% local in-browser execution; sensitive legal, financial, medical, and personal email archives never leave the user's device.
