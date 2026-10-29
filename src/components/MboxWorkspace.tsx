@@ -391,6 +391,8 @@ export default function MboxWorkspace() {
   const [archiveName, setArchiveName] = useState("google-takeout-sample.mbox");
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
   const [showRawHeaders, setShowRawHeaders] = useState(false);
+  const [showPasteBox, setShowPasteBox] = useState(false);
+  const [pasteText, setPasteText] = useState("");
 
   const filteredEmails = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -438,6 +440,20 @@ export default function MboxWorkspace() {
       `Loaded Google Takeout MBOX Sample (${parsed.length} messages + CSV attachment)!`
     );
     trackEvent("mbox_sample_loaded");
+  }
+
+  function handleParsePastedMbox() {
+    const raw = pasteText.trim();
+    if (!raw) return;
+    const parsed = parseMboxOrEmlText(raw);
+    if (parsed.length > 0) {
+      setEmails(parsed);
+      setSelectedId(parsed[0]?.id || "email-1");
+      setArchiveName("pasted-message.eml");
+      setShowPasteBox(false);
+      setStatusMsg(`Parsed ${parsed.length} email message(s) from pasted RFC 822 / MBOX text!`);
+      trackEvent("mbox_pasted_parsed", { count: parsed.length });
+    }
   }
 
   function handleExportPdf() {
@@ -562,6 +578,15 @@ export default function MboxWorkspace() {
           >
             ✨ Load Google Takeout MBOX Sample (3 Emails)
           </button>
+
+          <button
+            type="button"
+            data-testid="toggle-paste-mbox-btn"
+            onClick={() => setShowPasteBox((v) => !v)}
+            className="rounded-xl border border-sky-500/40 bg-sky-500/15 px-3.5 py-2 text-xs font-semibold text-sky-300 transition hover:bg-sky-500/25"
+          >
+            📋 Paste Raw .EML / .MBOX Source
+          </button>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -591,6 +616,32 @@ export default function MboxWorkspace() {
           </button>
         </div>
       </div>
+
+      {showPasteBox && (
+        <div className="rounded-2xl border border-sky-500/40 bg-slate-900/95 p-4 shadow-lg space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-xs font-bold text-sky-300">
+              📋 Paste Raw RFC 822 `.EML` Source or `.MBOX` Snippet Below (Decodes MIME Headers, Quoted-Printable &amp; Base64 Attachments)
+            </span>
+            <button
+              type="button"
+              data-testid="parse-paste-mbox-btn"
+              onClick={handleParsePastedMbox}
+              className="rounded-xl bg-sky-500 px-3.5 py-1.5 text-xs font-bold text-slate-950 transition hover:bg-sky-400"
+            >
+              ⚡ Parse Pasted Email Now
+            </button>
+          </div>
+          <textarea
+            data-testid="paste-mbox-textarea"
+            rows={5}
+            value={pasteText}
+            onChange={(e) => setPasteText(e.target.value)}
+            placeholder={"From: sender@example.com\nTo: team@example.com\nSubject: Pasted RFC 822 Test\nDate: Thu, 29 Oct 2026 10:00:00 +0000\n\nHello from raw EML source!"}
+            className="w-full rounded-xl border border-slate-700 bg-slate-950 p-3 font-mono text-xs text-slate-100 placeholder:text-slate-500"
+          />
+        </div>
+      )}
 
       {statusMsg && (
         <div

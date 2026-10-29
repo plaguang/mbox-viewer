@@ -100,6 +100,18 @@ function assert(cond, msg) {
     `Keyword search filters mailbox list to 1 / 3 (${filteredBadge})`
   );
 
+  // 6b. 测试 Paste Raw .EML / .MBOX Source 剪贴板解析功能
+  await page.getByTestId("toggle-paste-mbox-btn").click();
+  await page
+    .getByTestId("paste-mbox-textarea")
+    .fill("From: ceo@startup.io\nTo: legal@startup.io\nSubject: Pasted EML Verification\n\nBody decoded locally.");
+  await page.getByTestId("parse-paste-mbox-btn").click();
+  const pastedSubject = await page.getByTestId("active-email-subject").textContent();
+  assert(
+    pastedSubject?.includes("Pasted EML Verification"),
+    `Pasted raw RFC 822 .EML source parsed and displayed ("${pastedSubject?.trim()}")`
+  );
+
   // 7. 巡检全部 4 个 SEO 路由 + sitemap.xml + robots.txt
   for (const r of [
     "/",
